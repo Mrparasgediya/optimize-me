@@ -1,6 +1,6 @@
-const result = require("dotenv").config();
+// const result = require("dotenv").config();
 
-if (result.error) console.log(result.error);
+// if (result.error) console.log(result.error);
 
 module.exports = {
   allowed_origins: process.env.ALLOWED_ORIGINS,
