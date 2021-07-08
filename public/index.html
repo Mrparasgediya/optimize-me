@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-size: 1.4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Instagram image server</h1>
+    <h2>Routes</h2>
+    <ul>
+      <li>
+        POST: /image/upload to upload image (valid image types jpg, png, webp,
+        jpeg)
+      </li>
+      <li>
+        <div>GET: /image/:imageId to get image</div>
+        <div>query parameters</div>
+        <ul>
+          <li>h= height of image max value= imageheight</li>
+          <li>w= width of image max value= imageheight</li>
+          <li>
+            format= format of image,value = webp, jpg, jpeg, png, auto (display
+            image according browser support) default value = uploaded image type
+          </li>
+          <li>q= quality of image between 0 to 100(default)</li>
+          <li>
+            fit= position of image after resized. values are= cover(default),
+            contain, fill, inside, outside
+          </li>
+          <li>
+            position= position of image after resized. values are= top,
+            right-top, right, right-bottom, bottom, left-bottom, left, left-top.
+            tip: better use on fit cover or contain
+          </li>
+          <li>b= blur of image between 0.3 to 1000</li>
+          <li>brightness= brightness of image between 0 to 100</li>
+          <li>saturation= staturation of image between 0 to 239</li>
+          <li>hue= Degrees for hue rotation</li>
+          <li>
+            tint= tint image format= (r: redValue, g:greenValue, b: blueValue)
+          </li>
+          <li>
+            grayscale | greyscale = apply grayscale effect to image. value= true
+            or false
+          </li>
+        </ul>
+      </li>
+      <li>PUT: /image/:imageId to update image</li>
+      <li>DELETE: /image/:imageId to delete image</li>
+    </ul>
+    <b>note: to update or upload image keyname of image must be "image"</b>
+  </body>
+</html>

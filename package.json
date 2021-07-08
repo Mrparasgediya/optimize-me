@@ -1,0 +1,24 @@
+{
+  "name": "optimize-me",
+  "version": "1.0.0",
+  "description": "image optimization tool",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Paras Gediya",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.9"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.2",
+    "multer": "^1.4.2",
+    "sharp": "^0.28.3"
+  }
+}
