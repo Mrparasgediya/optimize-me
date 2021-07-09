@@ -144,7 +144,6 @@ router.put(
       const { message, code } = error;
       res.status(code || 400).send({ error: message });
     }
-    res.send();
   }
 );
 
