@@ -1,6 +1,7 @@
-// const result = require("dotenv").config();
-
-// if (result.error) console.log(result.error);
+if (process.env.NODE_ENV !== "production") {
+  const result = require("dotenv").config();
+  if (result.error) console.log(result.error);
+}
 
 module.exports = {
   allowed_origins: process.env.ALLOWED_ORIGINS,
