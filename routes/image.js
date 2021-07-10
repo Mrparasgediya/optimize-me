@@ -9,7 +9,6 @@ const {
 const { filterAndValidateQuery } = require("../utils/query");
 const path = require("path");
 const { app_domain } = require("../config");
-const { enableCors } = require("../middlewares/cors");
 
 const validQueries = [
   "h",
@@ -50,38 +49,34 @@ const uploader = multer({
 });
 
 // create image
-router.post(
-  "/images/upload",
-  enableCors,
-  uploader.single("image"),
-  async (req, res) => {
-    try {
-      if (!req.file) throw new Error("Enter image file");
-      let { mimetype, buffer, size } = req.file;
+router.post("/images/upload", uploader.single("image"), async (req, res) => {
+  try {
+    if (!req.file) throw new Error("Enter image file");
+    let { mimetype, buffer, size } = req.file;
 
-      const query = filterAndValidateQuery(req.query, validQueries);
-      const queryKeys = Object.keys(query);
+    const query = filterAndValidateQuery(req.query, validQueries);
+    const queryKeys = Object.keys(query);
 
-      if (queryKeys.length > 0) {
-        // get new mimetype of given formate from query
-        if (queryKeys.includes("format")) {
-          mimetype = getImageMimeTypeFromFormat(req) || mimetype;
-        }
-        // apply query filters to image
-        buffer = await getImageFromQuery(buffer, mimetype.split("/")[1], query);
+    if (queryKeys.length > 0) {
+      // get new mimetype of given formate from query
+      if (queryKeys.includes("format")) {
+        mimetype = getImageMimeTypeFromFormat(req) || mimetype;
       }
-
-      const newImage = new Image({ mimetype, src: buffer, size });
-      await newImage.save();
-      res.send({
-        imageId: newImage._id,
-        url: `${app_domain}/images/${newImage._id}`,
-      });
-    } catch (error) {
-      res.status(400).send({ error: error.message });
+      // apply query filters to image
+      buffer = await getImageFromQuery(buffer, mimetype.split("/")[1], query);
     }
+
+    const newImage = new Image({ mimetype, src: buffer, size });
+    await newImage.save();
+    res.send({
+      imageId: newImage._id,
+      url: `${app_domain}/images/${newImage._id}`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: error.message });
   }
-);
+});
 
 // get image
 router.get("/images/:imageId", async (req, res) => {
@@ -122,33 +117,28 @@ router.get("/images/:imageId", async (req, res) => {
 });
 
 // update image
-router.put(
-  "/images/:imageId",
-  enableCors,
-  uploader.single("image"),
-  async (req, res) => {
-    const { imageId: _id } = req.params;
-    try {
-      if (!req.file) throw new Error("Enter image file.");
-      const foundImage = await Image.findOne({ _id });
+router.put("/images/:imageId", uploader.single("image"), async (req, res) => {
+  const { imageId: _id } = req.params;
+  try {
+    if (!req.file) throw new Error("Enter image file.");
+    const foundImage = await Image.findOne({ _id });
 
-      if (!foundImage) throw { code: 404, message: "Image not found!" };
-      // set data of file
-      const { mimetype, buffer, size } = req.file;
-      foundImage.mimetype = mimetype;
-      foundImage.src = buffer;
-      foundImage.size = size;
-      await foundImage.save();
-      res.send();
-    } catch (error) {
-      const { message, code } = error;
-      res.status(code || 400).send({ error: message });
-    }
+    if (!foundImage) throw { code: 404, message: "Image not found!" };
+    // set data of file
+    const { mimetype, buffer, size } = req.file;
+    foundImage.mimetype = mimetype;
+    foundImage.src = buffer;
+    foundImage.size = size;
+    await foundImage.save();
+    res.send();
+  } catch (error) {
+    const { message, code } = error;
+    res.status(code || 400).send({ error: message });
   }
-);
+});
 
 // delete image
-router.delete("/images/:imageId", enableCors, async (req, res) => {
+router.delete("/images/:imageId", async (req, res) => {
   const { imageId: _id } = req.params;
   try {
     const foundImage = await Image.findOne({ _id });
